@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>V字变换</title>
+	<style>
+		#content{
+			width: 500px;
+			height: 500px;
+			border: 1px solid #000;
+			position:relative;/*子绝父相*/
+
+		}
+		#content div{
+			position: absolute;/*子绝父相*/
+			width: 100px;
+			height: 100px;
+			background: pink;
+			font-size:30px;
+			line-height: 100px;
+			text-align:center; /*文字居中*/
+
+		}
+		p{
+			text-align:center;
+			font-size:50px;
+			line-height: 400px;
+		}
+	</style>
+</head>
+<body>
+	<input type="button" value="变吧！" id="btn">
+	<input type="button" value="暂停！" id="btn2">
+	<input type="button" value="停止！" id="btn3">
+	<div id="content">
+		<!-- <div style="left:0px;top:0px">0</div>
+		<div style="left:100px;top:100px">1</div>
+		<div style="left:200px;top:200px">2</div>
+		<div style="left:300px;top:100px">3</div>
+		<div style="left:400px;top:0px">4</div> 这是目标效果，要通过js来实现-->
+
+	</div>
+	<script>
+		var btn=document.getElementById("btn");
+		var btn2=document.getElementById("btn2");
+		var btn3=document.getElementById("btn3");
+		var content=document.getElementById("content");
+		var str="";
+		var l=0;
+		var t=0;
+		var num=0;
+		var timer=null;
+		
+		btn3.onclick=function(){
+			clearInterval(timer);
+			content.innerHTML=" <p>谢谢观看！</p>";
+		}
+		btn2.onclick=function(){
+			clearInterval(timer);
+		}
+		btn.onclick=function(){
+			clearInterval(timer);//每次执行定时器前要清空上一个定时器，否则用户如果点击多次，就多出现多个定时器同时运转
+			timer=setInterval(bian,400);
+		}
+		function bian(){
+			str="";//每次点击先把str清空
+			/*
+			当v向上时：
+			i   left  top
+			0	0     0
+			1   100   100
+			2   200   200
+			3   300   100
+			4   400   0
+			*/
+			if(num==0){
+				for(var i=0;i<5;i++){
+				l=i*100;
+				if(i<=2){
+					t=i*100
+				}else{
+					t=400-i*100
+				}
+				str+='<div style="left:'+l+'px;top:'+t+'px">'+i+'</div>';
+				}
+			}
+			
+			/*
+			当v向右时：
+			i   left  top
+			0	400     0
+			1   300   100
+			2   200   200
+			3   300   300
+			4   400   400
+			*/
+			if(num==1){
+				for(var i=0;i<5;i++){
+				t=i*100;
+				if(i<=2){
+					l=400-i*100
+				}else{
+					l=i*100;
+				}
+				str+='<div style="left:'+l+'px;top:'+t+'px">'+i+'</div>';
+				}
+			}
+
+			/*
+			当v向下时：
+			i   left  top
+			0	0     400
+			1   100   300
+			2   200   200
+			3   300   300
+			4   400   400
+			*/
+			if(num==2){
+				for(var i=0;i<5;i++){
+				l=i*100;
+				if(i<=2){
+					t=400-i*100
+				}else{
+					t=i*100
+				}
+				str+='<div style="left:'+l+'px;top:'+t+'px">'+i+'</div>';
+				}
+			}
+
+			/*
+			当v向左时：
+			i   left  top
+			0	0     0
+			1   100   100
+			2   200   200
+			3   100   300
+			4   0     400
+			*/
+			if(num==3){
+				for(var i=0;i<5;i++){
+				t=i*100;
+				if(i<=2){
+					l=i*100
+				}else{
+					l=400-i*100
+				}
+				str+='<div style="left:'+l+'px;top:'+t+'px">'+i+'</div>';
+				}
+			}
+			
+			num++;
+			num%=4;
+			/*
+			或者用通俗一点的写法
+			if(num==4){
+				num=0
+			}
+			*/
+			content.innerHTML=str; 
+			// innerHTML多次操作DOM性能较差，因此先用str保存后一次性赋值
+		}
+
+	</script>
+</body>
+</html>
